@@ -1,0 +1,63 @@
+@import url(http://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic,700italic&subset=latin,cyrillic);
+
+body {
+    font-family: monospace;
+    font-size:16px;
+    color:#00FF00;
+    background-color: #000000;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+::selection {
+    background: #00FF00;
+    color: #000000;
+}
+
+* {
+    font-family: monospace;
+    cursor: text;
+    color:#00FF00;
+    background-color: #000000;
+}
+
+a img {
+    border:none;
+}
+
+#console {
+    display: block;
+    margin: 0;
+    padding: 15px 15px 0 15px;
+    cursor: text;
+    color:#00FF00;
+    background-color: #000000;
+    line-height: 1.5;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+#writeBox {
+    width: 100%;
+    margin: 3px 0 15px 0;
+}
+
+#status {
+    padding-left: 15px;
+    padding-right: 5px;
+}
+
+#writeTr {
+    width: 99%;
+}
+
+#write {
+    font-size: 16px;
+    border: none;
+    box-shadow: none;
+    outline: none!important;
+    display: block;
+    width: 90%;
+    margin-right:auto;
+}
