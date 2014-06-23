@@ -1,10 +1,12 @@
-function console (command){
+function console (command,hide){
   if(command.trim() != ''){
-    if(log[log_pos - 1] != command)
-    log[log.length] = command;
-    log_pos = log.length;
-    $('#console').text($('#console').text()+$('#status').text().trim()+' ');
-    write(command);
+    if(hide == 0 || typeof hide == "undefined"){
+      if(log[log_pos - 1] != command)
+        log[log.length] = command;
+      log_pos = log.length;
+      $('#console').text($('#console').text()+$('#status').text().trim()+' ');
+      write(command);
+    }
     command = command.split(' ');
     var com = command[0].toLowerCase();
     var n = 1;
@@ -65,19 +67,16 @@ function console (command){
           break;
         case 'online':
           var offset = typeof par[1]  != "undefined" ? par[1] : 0;
-          VK.Api.call('friends.getOnline', {user_id:user['mid'],list_id:0,offset:offset,online_mobile:0,count:5}, function(r) {
+          VK.Api.call('friends.getOnline', {user_id:user['mid'],list_id:0,offset:offset,online_mobile:0,count:1}, function(r) {
             if(r.response) {
-              var n = 0;
-              while(typeof r.response[n] != "undefined"){
-                VK.Api.call('users.get', {uids: r.response[n]}, function(s) {
+                VK.Api.call('friends.get', {user_id: r.response[0]}, function(s) {
                   if(s.response) {
                     write(' ● ' + s.response[0].first_name + ' ' + s.response[0].last_name);
                   }
                 });
-                n = n + 1;
-              }
-              offset = offset + 5;
-              console('online '+offset)
+              offset = parseInt(offset);
+              offset += 1;
+              console('online '+offset,0);
             }
           });
           break;
