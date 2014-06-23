@@ -30,12 +30,6 @@ function start (){
   }
 }
 
-function write(text,add){
-  add = typeof add !== 'undefined' ? add : '';
-  $('#console').text($('#console').text() == '\n' ? text+add : $('#console').text()+text+add);
-  $('#write').val('');
-}
-
 function console (command){
   $('#console').text($('#console').text()+'\n'+$('#status').text().trim()+' ');
   write(command,'\n');

@@ -22,12 +22,6 @@ function console (command){
             write('Привіт ' + user['first_name'] + ' ' + user['last_name'] + ' :)');
           break;
         case 'login':
-          VK.Api.call('account.getAppPermissions', {user_id: user['mid']}, function(r) {
-            print_r(r);
-            if(r.error) {
-              print_r(r.error);
-            }
-          });
           VK.Auth.login(function() {
             VK.Auth.getLoginStatus(authInfo);
             VK.Api.call('users.get', {uids: user['mid']}, function(r) {
@@ -37,7 +31,7 @@ function console (command){
                 user['last_name'] = r.response[0].last_name;
               }
             });
-          }, +1+2+1024+4096+524288);
+          }, +4096+1024+2);
           break;
         case 'exit':
           VK.Auth.logout(function(response) {
@@ -53,7 +47,7 @@ function console (command){
             '. exit\t\t\tВийти з ВКонтакті\n' +
             '.\n' +
             '. КОНСОЛЬ\n' +
-            '. cls\t\t\tОчистити консоль\n' +
+            '. clear\t\t\tОчистити консоль\n' +
             '. restart\t\tПерезавантажити консоль\n' +
             '.\n' +
             '. СТАТУС\n' +
@@ -63,26 +57,27 @@ function console (command){
           break;
         case 'dialog':
           VK.Api.call('messages.getDialogs', {count:20}, function(r) {
-            print_r(r);
             if(r.response) {
               var n = 0;
-              print_r(r.response);
               status(user['mid']+'/dialog');
             }
           });
           break;
         case 'online':
-          VK.Api.call('friends.getOnline', {user_id:user['mid'],count:100}, function(r) {
+          var offset = typeof par[1]  != "undefined" ? par[1] : 0;
+          VK.Api.call('friends.getOnline', {user_id:user['mid'],list_id:0,offset:offset,online_mobile:0,count:5}, function(r) {
             if(r.response) {
               var n = 0;
               while(typeof r.response[n] != "undefined"){
                 VK.Api.call('users.get', {uids: r.response[n]}, function(s) {
                   if(s.response) {
-                    write(' ● ' + s.response[n].first_name + ' ' + s.response[n].last_name);
+                    write(' ● ' + s.response[0].first_name + ' ' + s.response[0].last_name);
                   }
                 });
                 n = n + 1;
               }
+              offset = offset + 5;
+              console('online '+offset)
             }
           });
           break;
@@ -93,7 +88,7 @@ function console (command){
             }
           });
           break;
-        case 'cls':
+        case 'clear':
           $('#console').text('');
           $('#write').val('');
           break;

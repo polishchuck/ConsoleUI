@@ -1,4 +1,3 @@
-var host = 'http://c.mesija.net/';
 var user = [];
 user['mid'] = 0;
 var log = [];
