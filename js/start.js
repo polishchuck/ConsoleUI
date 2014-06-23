@@ -21,10 +21,18 @@ setTimeout(start,0);
 
 function authInfo(response) {
   if (response.session) {
-    status(response.session.mid);
     user['mid'] = response.session.mid;
+    VK.Api.call('users.get', {uids: user['mid'],fields:'screen_name'}, function(r) {
+      if(r.response) {
+        user['first_name'] = r.response[0].first_name;
+        user['last_name'] = r.response[0].last_name;
+        user['screen_name'] = r.response[0].screen_name;
+        status(user['screen_name']);
+        console('hi',1);
+      }
+    });
   } else {
-    status('console');
+    status('ConsoleUI');
   }
 }
 
@@ -53,17 +61,18 @@ function start (){
   VK.init({
     apiId: 4390729
   });
-  VK.Auth.getLoginStatus(authInfo);
-  VK.Api.call('users.get', {uids: user['mid']}, function(r) {
-    if(r.response) {
-      write('Привіт ' + r.response[0].first_name + ' ' + r.response[0].last_name + '!');
-      user['first_name'] = r.response[0].first_name;
-      user['last_name'] = r.response[0].last_name;
-    }
-  });
   write('Вітаємо у Console UI!\n' +
     'Для авторизації у соціальній мережі ВКонтакті використовуйте команду login\n' +
     'Щоб отримати список усіх команд виконайте команду help');
+  VK.Auth.getLoginStatus(authInfo);
+  VK.Api.call('users.get', {uids: user['mid']}, function(r) {
+    if(r.response) {
+      user['first_name'] = r.response[0].first_name;
+      user['last_name'] = r.response[0].last_name;
+      user['screen_name'] = r.response[0].screen_name;
+    }
+  });
+  status(user['screen_name']);
 }
 
 function write(text,add){
@@ -77,7 +86,7 @@ $('*').click(function(){
 });
 
 function status (text){
-  $('#status').text('['+text+']#');
+  $('#status').text(text+':');
 }
 
 function getCookie(name) {
